@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Concentration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="settingsClose">&times;</span>
+            <h2>⚙️ Settings</h2>
+            <div class="setting-group">
+                <label for="matchedPairBehavior">When pairs are matched:</label>
+                <select id="matchedPairBehavior">
+                    <option value="stay">Stay face up</option>
+                    <option value="disappear">Disappear</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="autoAdvance">Auto-advance after memorization:</label>
+                <input type="checkbox" id="autoAdvance">
+            </div>
+            <div class="setting-group">
+                <label for="timerDuration">Auto-advance timer (seconds):</label>
+                <input type="number" id="timerDuration" min="10" max="300" value="60">
+            </div>
+            <div class="setting-group">
+                <label for="openaiApiKey">OpenAI API Key (for TTS):</label>
+                <input type="password" id="openaiApiKey" placeholder="sk-..." style="width: 100%; margin-top: 5px;">
+                <small>Required for Listen to Explanations mode</small>
+            </div>
+            <div class="setting-group">
+                <h4 style="margin-bottom: 8px; color: #2d3436;">Listen Mode TTS</h4>
+                <label>
+                    <input type="checkbox" id="listenSpeakExplanation" checked>
+                    Speak explanation
+                </label>
+                <label style="display: block; margin-top: 5px;">
+                    <input type="checkbox" id="listenSpeakExample" checked>
+                    Speak example
+                </label>
+            </div>
+            <button id="saveSettings">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- Library Modal -->
+    <div id="libraryModal" class="modal">
+        <div class="modal-content library-modal">
+            <span class="close" id="libraryClose">&times;</span>
+            <h2>📚 SQL Library</h2>
+            <p>Select a lesson deck to study:</p>
+            <div id="libraryGrid" class="library-grid">
+                <!-- Library items will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="importClose">&times;</span>
+            <h2>📁 Import SQL Deck</h2>
+            <p>Import a JSON file with SQL commands:</p>
+            <input type="file" id="fileInput" accept=".json">
+            <div id="importPreview" class="import-preview"></div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="modal">
+        <div class="modal-content celebration">
+            <h2>🎉 Congratulations!</h2>
+            <p id="celebrationMessage">You've completed the round!</p>
+            <button id="playAgainBtn" class="control-btn">Play Again</button>
+            <button id="nextRoundBtn" class="control-btn">Next Round</button>
+        </div>
+    </div>
+
+    <!-- AI Explanation Modal -->
+    <div id="aiExplanationModal" class="modal ai-modal">
+        <div class="modal-content ai-modal-content">
+            <div class="ai-modal-header">
+                <h2 id="aiExplanationTitle">🤖 AI Explanation</h2>
+                <button class="close" id="closeAiExplanationModal">&times;</button>
+            </div>
+            <div id="aiExplanationContent" class="ai-modal-body">
+                <!-- AI explanation will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>🗃️ SQL Concentration</h1>
+            <p class="subtitle">Master SQL through interactive learning</p>
+            <div class="header-controls">
+                <button id="libraryBtn" class="control-btn">📚 Library</button>
+                <button id="importBtn" class="control-btn">📁 Import</button>
+                <button id="settingsBtn" class="control-btn">⚙️ Settings</button>
+            </div>
+        </header>
+
+        <!-- Game Mode Selection Screen -->
+        <div id="gameModeScreen" class="screen">
+            <h2>Choose Your Learning Mode</h2>
+            <div class="mode-grid">
+                <div class="mode-card" id="memorizeMode">
+                    <div class="mode-icon">📖</div>
+                    <h3>Memorize</h3>
+                    <p>Study all SQL commands at your own pace</p>
+                </div>
+                <div class="mode-card" id="concentrationMode">
+                    <div class="mode-icon">🃏</div>
+                    <h3>Concentration</h3>
+                    <p>Match SQL commands with their explanations</p>
+                </div>
+                <div class="mode-card" id="dragDropMode">
+                    <div class="mode-icon">🎯</div>
+                    <h3>Drag & Drop</h3>
+                    <p>Drag SQL commands to match explanations</p>
+                </div>
+                <div class="mode-card" id="listenMode">
+                    <div class="mode-icon">🎧</div>
+                    <h3>Listen & Learn</h3>
+                    <p>Listen to SQL explanations with AI audio</p>
+                </div>
+                <div class="mode-card" id="practiceMode">
+                    <div class="mode-icon">✍️</div>
+                    <h3>Practice</h3>
+                    <p>Type SQL commands from descriptions</p>
+                </div>
+                <div class="mode-card" id="timedMode">
+                    <div class="mode-icon">⏱️</div>
+                    <h3>Timed Challenge</h3>
+                    <p>Test your SQL knowledge against the clock</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pre-Game Memorization Screen -->
+        <div id="preGameScreen" class="screen">
+            <div class="pre-game-header">
+                <h2>📖 Study Mode</h2>
+                <p>Memorize the SQL commands, then start playing!</p>
+                <div id="preGameTimer" class="timer-display"></div>
+            </div>
+            
+            <div class="flip-controls">
+                <button id="flipCommandBtn" class="flip-btn">🙈 Hide Commands</button>
+                <button id="flipExplanationBtn" class="flip-btn">🙈 Hide Explanations</button>
+                <button id="resetFlipBtn" class="flip-btn">🔄 Reset All</button>
+                <button id="scrambleBtn" class="flip-btn">🔀 Scramble Order</button>
+            </div>
+            
+            <div id="cardPairsDisplay" class="card-pairs-container">
+                <!-- Card pairs will be generated here -->
+            </div>
+            
+            <div class="pre-game-controls">
+                <button id="startGameBtn" class="control-btn">🎮 Start Game</button>
+                <button id="chooseModeBtn" class="control-btn">🔙 Choose Mode</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <div class="round-info">
+                    <h2 id="roundTitle">Round 1</h2>
+                    <p id="roundDescription">Match SQL commands with explanations</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <span class="stat-label">Attempts:</span>
+                        <span id="attempts" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Score:</span>
+                        <span id="score" class="stat-value">1000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Matches:</span>
+                        <span id="matches" class="stat-value">0/26</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="gameBoard" class="game-board">
+                <!-- Game cards will be generated here -->
+            </div>
+            
+            <div class="game-controls">
+                <button id="backToMemorizeBtn" class="control-btn">📖 Back to Study</button>
+                <button id="restartRoundBtn" class="control-btn">🔄 Restart Round</button>
+            </div>
+        </div>
+
+        <!-- Drag & Drop Screen -->
+        <div id="dragDropScreen" class="screen">
+            <div class="drag-drop-header">
+                <h2>🎯 Drag & Drop Mode</h2>
+                <p>Drag SQL commands to match their explanations</p>
+                <div class="drag-drop-stats">
+                    <span>Matches: <strong id="dragDropMatches">0</strong></span>
+                    <span>Attempts: <strong id="dragDropAttempts">0</strong></span>
+                </div>
+            </div>
+            
+            <div class="drag-drop-container">
+                <div id="dragItems" class="drag-items">
+                    <!-- Draggable SQL commands -->
+                </div>
+                <div id="dropZones" class="drop-zones">
+                    <!-- Drop zones for explanations -->
+                </div>
+            </div>
+            
+            <div class="drag-drop-controls">
+                <button id="checkDragDropBtn" class="control-btn">✅ Check Answers</button>
+                <button id="resetDragDropBtn" class="control-btn">🔄 Reset</button>
+                <button id="exitDragDropBtn" class="control-btn">🏠 Mode Select</button>
+            </div>
+        </div>
+
+        <!-- Listen & Learn Screen -->
+        <div id="listenScreen" class="screen">
+            <div class="listen-header">
+                <h2>🎧 Listen & Learn</h2>
+                <p>Listen to SQL explanations with AI-powered audio</p>
+                <div class="listen-controls">
+                    <div class="listen-toggles">
+                        <button id="toggleListenExplanation" class="control-btn toggle-btn active">🗣️ Explanation</button>
+                        <button id="toggleListenExample" class="control-btn toggle-btn active">📝 Example</button>
+                        <button id="toggleListenLoop" class="control-btn toggle-btn">🔄 Loop</button>
+                    </div>
+                    <div class="listen-actions">
+                        <button id="playAllBtn" class="control-btn">▶️ Play All</button>
+                        <button id="stopPlaybackBtn" class="control-btn">⏹️ Stop</button>
+                        <button id="clearCacheBtn" class="control-btn">🗑️ Clear Cache</button>
+                        <button id="exitListenBtn" class="control-btn">🏠 Mode Select</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="listenContent" class="listen-content">
+                <div id="listenList" class="listen-list">
+                    <!-- SQL items will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Mode Screen -->
+        <div id="practiceScreen" class="screen">
+            <div class="practice-header">
+                <h2>✍️ Practice Mode</h2>
+                <p>Type the SQL command based on the description</p>
+                <div class="practice-stats">
+                    <span>Correct: <strong id="practiceCorrect">0</strong></span>
+                    <span>Incorrect: <strong id="practiceIncorrect">0</strong></span>
+                </div>
+            </div>
+            
+            <div class="practice-container">
+                <div id="practiceCard" class="practice-card">
+                    <div class="practice-category" id="practiceCategory"></div>
+                    <div class="practice-description" id="practiceDescription"></div>
+                    <input type="text" id="practiceInput" class="practice-input" placeholder="Type the SQL command...">
+                    <div class="practice-buttons">
+                        <button id="checkPracticeBtn" class="control-btn">✅ Check</button>
+                        <button id="skipPracticeBtn" class="control-btn">⏭️ Skip</button>
+                        <button id="hintPracticeBtn" class="control-btn">💡 Hint</button>
+                    </div>
+                    <div id="practiceFeedback" class="practice-feedback"></div>
+                </div>
+            </div>
+            
+            <div class="practice-controls">
+                <button id="exitPracticeBtn" class="control-btn">🏠 Mode Select</button>
+            </div>
+        </div>
+
+        <!-- Timed Mode Screen -->
+        <div id="timedScreen" class="screen">
+            <div class="timed-header">
+                <h2>⏱️ Timed Challenge</h2>
+                <div class="timed-stats">
+                    <div class="timer-big" id="timedTimer">60</div>
+                    <div class="timed-score">Score: <strong id="timedScore">0</strong></div>
+                </div>
+            </div>
+            
+            <div id="timedContainer" class="timed-container">
+                <!-- Timed mode content -->
+            </div>
+            
+            <div id="timedOverlay" class="timed-overlay">
+                <div class="timed-card-pair" id="timedCardPair">
+                    <!-- Current card pair -->
+                </div>
+                <div class="timed-controls">
+                    <button id="timedThumbsUp" class="timed-btn thumbs-up">👍 I Know This!</button>
+                    <button id="timedThumbsDown" class="timed-btn thumbs-down">🤔 Need Practice</button>
+                </div>
+                <div class="timed-progress">
+                    <span id="timedCurrentCard">1</span> / <span id="timedTotalCards">26</span>
+                </div>
+                <div class="timed-timer-display" id="timedTimerDisplay">5</div>
+                <button id="exitTimedBtn" class="control-btn">🚪 Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=1771367000"></script>
+</body>
+</html>

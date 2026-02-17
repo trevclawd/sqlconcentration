@@ -1,0 +1,14 @@
+{
+  "name": "SQL Learning Library",
+  "description": "Comprehensive SQL lessons from beginner to advanced",
+  "totalDecks": 1,
+  "decks": [
+    {
+      "filename": "sql-basics.json",
+      "name": "SQL Fundamentals",
+      "description": "Essential SQL commands and syntax",
+      "cardCount": 52,
+      "difficulty": "beginner"
+    }
+  ]
+}
