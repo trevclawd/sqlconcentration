@@ -26,18 +26,18 @@ class SQLConcentrationGame {
         this.isExplanationHidden = false;
         this.library = null;
         this.currentDeck = null;
-        
+
         // Practice mode state
         this.practiceIndex = 0;
         this.practiceCorrect = 0;
         this.practiceIncorrect = 0;
         this.practiceCards = [];
-        
+
         // Drag drop state
         this.dragDropMatches = 0;
         this.dragDropAttempts = 0;
         this.dragItems = [];
-        
+
         // Timed mode state
         this.timedActive = false;
         this.timedIndex = 0;
@@ -45,7 +45,7 @@ class SQLConcentrationGame {
         this.timedTimer = null;
         this.timedTimeLeft = 5;
         this.timedCards = [];
-        
+
         this.init();
     }
 
@@ -88,14 +88,14 @@ class SQLConcentrationGame {
             if (el.type === 'checkbox') el.checked = value;
             else el.value = value;
         };
-        
+
         updateEl('matchedPairBehavior', this.settings.matchedPairBehavior);
         updateEl('autoAdvance', this.settings.autoAdvance);
         updateEl('timerDuration', this.settings.timerDuration);
         updateEl('openaiApiKey', this.settings.openaiApiKey);
         updateEl('listenSpeakExplanation', this.settings.listenSpeakExplanation);
         updateEl('listenSpeakExample', this.settings.listenSpeakExample);
-        
+
         // Update toggle button states
         const expBtn = document.getElementById('toggleListenExplanation');
         const exBtn = document.getElementById('toggleListenExample');
@@ -107,7 +107,7 @@ class SQLConcentrationGame {
         try {
             const response = await fetch('decks/index.json');
             this.library = await response.json();
-            
+
             if (this.library.decks && this.library.decks.length > 0) {
                 await this.loadDeck(this.library.decks[0].filename);
             }
@@ -191,7 +191,7 @@ class SQLConcentrationGame {
         this.stopPreGameTimer();
         let timeLeft = this.settings.timerDuration;
         const display = document.getElementById('preGameTimer');
-        
+
         const update = () => {
             if (display) {
                 const mins = Math.floor(timeLeft / 60);
@@ -199,7 +199,7 @@ class SQLConcentrationGame {
                 display.textContent = `Auto-start in: ${mins}:${secs.toString().padStart(2, '0')}`;
             }
         };
-        
+
         update();
         this.preGameTimer = setInterval(() => {
             timeLeft--;
@@ -227,12 +227,12 @@ class SQLConcentrationGame {
         container.innerHTML = '';
 
         this.displayCards = [...this.cards];
-        
+
         this.displayCards.forEach((card, index) => {
             const pair = document.createElement('div');
             pair.className = 'card-pair';
             pair.dataset.index = index;
-            
+
             pair.innerHTML = `
                 <div class="playing-card sql-card ${this.isCommandHidden ? 'flipped' : ''}">
                     <div class="card-face card-front">
@@ -295,7 +295,7 @@ class SQLConcentrationGame {
         this.score = 1000;
         this.matchedPairs = [];
         this.flippedCards = [];
-        
+
         this.createGameCards();
         this.showGame();
         this.updateGameUI();
@@ -304,12 +304,12 @@ class SQLConcentrationGame {
     createGameCards() {
         this.gameCards = [];
         const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
-        
+
         cardsToUse.forEach(card => {
             this.gameCards.push({ ...card, type: 'command', pairId: card.id, matched: false });
             this.gameCards.push({ ...card, type: 'explanation', pairId: card.id, matched: false });
         });
-        
+
         this.shuffleArray(this.gameCards);
         this.displayGameBoard();
     }
@@ -323,7 +323,7 @@ class SQLConcentrationGame {
             const cardEl = document.createElement('div');
             cardEl.className = 'game-card';
             cardEl.dataset.index = index;
-            
+
             if (card.type === 'command') {
                 cardEl.innerHTML = `
                     <div class="card-inner">
@@ -344,7 +344,7 @@ class SQLConcentrationGame {
                     </div>
                 `;
             }
-            
+
             cardEl.addEventListener('click', () => this.flipCard(index));
             board.appendChild(cardEl);
         });
@@ -376,13 +376,13 @@ class SQLConcentrationGame {
             this.matchedPairs.push(card1.pairId);
             card1.matched = true;
             card2.matched = true;
-            
+
             setTimeout(() => {
                 document.querySelector(`.game-card[data-index="${idx1}"]`)?.classList.add('matched');
                 document.querySelector(`.game-card[data-index="${idx2}"]`)?.classList.add('matched');
                 this.flippedCards = [];
                 this.updateGameUI();
-                
+
                 const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
                 if (this.matchedPairs.length === cardsToUse.length) {
                     this.roundComplete();
@@ -404,14 +404,14 @@ class SQLConcentrationGame {
         const scoreEl = document.getElementById('score');
         const matchesEl = document.getElementById('matches');
         const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
-        
+
         if (attemptsEl) attemptsEl.textContent = this.attempts;
         if (scoreEl) scoreEl.textContent = this.score;
         if (matchesEl) matchesEl.textContent = `${this.matchedPairs.length}/${cardsToUse.length}`;
     }
 
     roundComplete() {
-        document.getElementById('celebrationMessage').textContent = 
+        document.getElementById('celebrationMessage').textContent =
             `Round ${this.currentRound} complete!\nScore: ${this.score}\nAttempts: ${this.attempts}`;
         document.getElementById('celebrationModal').style.display = 'flex';
     }
@@ -431,7 +431,7 @@ class SQLConcentrationGame {
         this.dragItems = [...cardsToUse].sort(() => Math.random() - 0.5);
         this.dragDropMatches = 0;
         this.dragDropAttempts = 0;
-        
+
         this.updateDragDropUI();
         this.displayDragDrop();
     }
@@ -439,15 +439,15 @@ class SQLConcentrationGame {
     displayDragDrop() {
         const dragContainer = document.getElementById('dragItems');
         const dropContainer = document.getElementById('dropZones');
-        
+
         if (!dragContainer || !dropContainer) return;
-        
+
         // Shuffle for drop zones
         const dropItems = [...this.dragItems].sort(() => Math.random() - 0.5);
-        
+
         dragContainer.innerHTML = '';
         dropContainer.innerHTML = '';
-        
+
         this.dragItems.forEach((card, i) => {
             const item = document.createElement('div');
             item.className = 'drag-item';
@@ -459,45 +459,45 @@ class SQLConcentrationGame {
             });
             dragContainer.appendChild(item);
         });
-        
+
         dropItems.forEach((card, i) => {
             const zone = document.createElement('div');
             zone.className = 'drop-zone';
             zone.dataset.id = card.id;
             zone.innerHTML = `<div class="drop-zone-desc">${card.description}</div>`;
-            
+
             zone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 zone.classList.add('drag-over');
             });
-            
+
             zone.addEventListener('dragleave', () => {
                 zone.classList.remove('drag-over');
             });
-            
+
             zone.addEventListener('drop', (e) => {
                 e.preventDefault();
                 zone.classList.remove('drag-over');
                 const draggedId = e.dataTransfer.getData('text/plain');
                 this.handleDrop(draggedId, zone.dataset.id, zone);
             });
-            
+
             dropContainer.appendChild(zone);
         });
     }
 
     handleDrop(draggedId, zoneId, zoneEl) {
         this.dragDropAttempts++;
-        
+
         if (draggedId === zoneId) {
             this.dragDropMatches++;
             zoneEl.classList.add('matched');
-            
+
             // Remove the matched drag item
             const dragItem = document.querySelector(`.drag-item[data-id="${draggedId}"]`);
             if (dragItem) dragItem.style.display = 'none';
         }
-        
+
         this.updateDragDropUI();
     }
 
@@ -505,10 +505,10 @@ class SQLConcentrationGame {
         const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
         const matchesEl = document.getElementById('dragDropMatches');
         const attemptsEl = document.getElementById('dragDropAttempts');
-        
+
         if (matchesEl) matchesEl.textContent = this.dragDropMatches;
         if (attemptsEl) attemptsEl.textContent = this.dragDropAttempts;
-        
+
         if (this.dragDropMatches === cardsToUse.length) {
             setTimeout(() => {
                 alert(`Drag & Drop Complete!\nMatches: ${this.dragDropMatches}/${cardsToUse.length}\nAttempts: ${this.dragDropAttempts}`);
@@ -517,8 +517,30 @@ class SQLConcentrationGame {
     }
 
     checkDragDrop() {
-        // Manual check if needed
+        // Validate all drop zones
+        const dropZones = document.querySelectorAll('.drop-zone');
+        let correctMatches = 0;
+
+        dropZones.forEach(zone => {
+            const zoneId = zone.dataset.id;
+            const droppedItem = zone.querySelector('.drag-item');
+
+            if (droppedItem && droppedItem.dataset.id === zoneId) {
+                correctMatches++;
+            }
+        });
+
+        this.dragDropMatches = correctMatches;
+        this.dragDropAttempts++;
+
         this.updateDragDropUI();
+
+        const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
+        if (this.dragDropMatches === cardsToUse.length) {
+            setTimeout(() => {
+                alert(`Drag & Drop Complete!\nMatches: ${this.dragDropMatches}/${cardsToUse.length}\nAttempts: ${this.dragDropAttempts}`);
+            }, 500);
+        }
     }
 
     resetDragDrop() {
@@ -537,7 +559,7 @@ class SQLConcentrationGame {
             const item = document.createElement('div');
             item.className = 'listen-item';
             item.dataset.index = index;
-            
+
             item.innerHTML = `
                 <div class="listen-item-header">
                     <span class="listen-number">${index + 1}</span>
@@ -617,7 +639,7 @@ class SQLConcentrationGame {
         }
 
         const cardsToUse = this.displayCards.length > 0 ? this.displayCards : this.cards;
-        
+
         this.isPlayingAll = true;
         const playBtn = document.getElementById('playAllBtn');
         if (playBtn) {
@@ -629,7 +651,7 @@ class SQLConcentrationGame {
             const card = cardsToUse[i];
             const item = document.querySelector(`.listen-item[data-index="${i}"]`);
             const btn = item?.querySelector('.listen-play-btn');
-            
+
             // Highlight current
             document.querySelectorAll('.listen-item').forEach(el => el.classList.remove('playing'));
             item?.classList.add('playing');
@@ -698,7 +720,7 @@ class SQLConcentrationGame {
         });
 
         if (!response.ok) throw new Error(`TTS API error: ${response.status}`);
-        
+
         const blob = await response.blob();
         this.audioCache[text] = blob;
         return blob;
@@ -781,7 +803,7 @@ Format with clear headings and code examples.`
         this.practiceIndex = 0;
         this.practiceCorrect = 0;
         this.practiceIncorrect = 0;
-        
+
         this.updatePracticeUI();
         this.showPracticeCard();
     }
@@ -798,7 +820,7 @@ Format with clear headings and code examples.`
         const descEl = document.getElementById('practiceDescription');
         const inputEl = document.getElementById('practiceInput');
         const feedbackEl = document.getElementById('practiceFeedback');
-        
+
         if (catEl) catEl.textContent = card.category || 'SQL';
         if (descEl) descEl.textContent = card.description;
         if (inputEl) {
@@ -811,15 +833,15 @@ Format with clear headings and code examples.`
     checkPracticeAnswer() {
         const inputEl = document.getElementById('practiceInput');
         const feedbackEl = document.getElementById('practiceFeedback');
-        
+
         if (!inputEl) return;
-        
+
         const userAnswer = inputEl.value.trim().toUpperCase();
         const correctAnswer = this.practiceCards[this.practiceIndex].command.toUpperCase();
-        
+
         // Normalize answers for comparison
         const normalize = (s) => s.replace(/\s+/g, ' ').trim();
-        
+
         if (normalize(userAnswer) === normalize(correctAnswer)) {
             this.practiceCorrect++;
             if (feedbackEl) {
@@ -862,7 +884,7 @@ Format with clear headings and code examples.`
     updatePracticeUI() {
         const correctEl = document.getElementById('practiceCorrect');
         const incorrectEl = document.getElementById('practiceIncorrect');
-        
+
         if (correctEl) correctEl.textContent = this.practiceCorrect;
         if (incorrectEl) incorrectEl.textContent = this.practiceIncorrect;
     }
@@ -874,7 +896,7 @@ Format with clear headings and code examples.`
         this.timedIndex = 0;
         this.timedScore = 0;
         this.timedActive = true;
-        
+
         this.updateTimedUI();
         this.showTimedCard();
     }
@@ -887,7 +909,7 @@ Format with clear headings and code examples.`
 
         const card = this.timedCards[this.timedIndex];
         const container = document.getElementById('timedCardPair');
-        
+
         if (container) {
             container.innerHTML = `
                 <div class="timed-card">
@@ -899,7 +921,7 @@ Format with clear headings and code examples.`
                 </div>
             `;
         }
-        
+
         this.timedTimeLeft = 5;
         this.startTimedTimer();
         this.updateTimedUI();
@@ -907,13 +929,13 @@ Format with clear headings and code examples.`
 
     startTimedTimer() {
         this.stopTimedTimer();
-        
+
         const timerDisplay = document.getElementById('timedTimerDisplay');
-        
+
         this.timedTimer = setInterval(() => {
             this.timedTimeLeft--;
             if (timerDisplay) timerDisplay.textContent = this.timedTimeLeft;
-            
+
             if (this.timedTimeLeft <= 0) {
                 this.stopTimedTimer();
                 this.timedThumbsDown();
@@ -955,7 +977,7 @@ Format with clear headings and code examples.`
         const currentEl = document.getElementById('timedCurrentCard');
         const totalEl = document.getElementById('timedTotalCards');
         const timerEl = document.getElementById('timedTimerDisplay');
-        
+
         if (scoreEl) scoreEl.textContent = this.timedScore;
         if (currentEl) currentEl.textContent = this.timedIndex + 1;
         if (totalEl) totalEl.textContent = this.timedCards.length;
@@ -1107,14 +1129,14 @@ Format with clear headings and code examples.`
                 if (!el) return null;
                 return el.type === 'checkbox' ? el.checked : el.value;
             };
-            
+
             this.settings.matchedPairBehavior = getVal('matchedPairBehavior') || 'stay';
             this.settings.autoAdvance = getVal('autoAdvance') || false;
             this.settings.timerDuration = parseInt(getVal('timerDuration')) || 60;
             this.settings.openaiApiKey = getVal('openaiApiKey') || '';
             this.settings.listenSpeakExplanation = getVal('listenSpeakExplanation') !== false;
             this.settings.listenSpeakExample = getVal('listenSpeakExample') !== false;
-            
+
             this.saveSettings();
             document.getElementById('settingsModal').style.display = 'none';
         });
