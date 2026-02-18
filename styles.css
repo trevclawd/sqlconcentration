@@ -580,3 +580,307 @@ body {
         flex-wrap: wrap;
     }
 }
+
+/* Drag & Drop Styles */
+.drag-drop-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.drag-drop-header h2 {
+    margin: 0 0 5px 0;
+}
+
+.drag-drop-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.drag-drop-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 20px 0;
+}
+
+.drag-items, .drop-zones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.drag-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: grab;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.drag-item:hover {
+    transform: scale(1.02);
+}
+
+.drag-item:active {
+    cursor: grabbing;
+}
+
+.drop-zone {
+    background: #f8f9fa;
+    border: 3px dashed #dfe6e9;
+    border-radius: 10px;
+    padding: 20px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.drop-zone.drag-over {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.drop-zone.matched {
+    border-color: #00b894;
+    background: rgba(0, 184, 148, 0.1);
+}
+
+.drop-zone-desc {
+    text-align: center;
+    color: #2d3436;
+}
+
+.drag-drop-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Practice Mode Styles */
+.practice-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.practice-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+.practice-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.practice-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+}
+
+.practice-category {
+    color: #667eea;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.practice-description {
+    font-size: 1.3rem;
+    color: #2d3436;
+    margin-bottom: 20px;
+}
+
+.practice-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-family: 'Courier New', monospace;
+    border: 3px solid #dfe6e9;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.practice-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.practice-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.practice-feedback {
+    margin-top: 20px;
+    font-size: 1.1rem;
+}
+
+.feedback-correct {
+    color: #00b894;
+    font-weight: bold;
+}
+
+.feedback-incorrect {
+    color: #e74c3c;
+}
+
+.feedback-incorrect code {
+    background: #f8f9fa;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.feedback-hint {
+    color: #fdcb6e;
+}
+
+.practice-controls {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Timed Mode Styles */
+.timed-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.timed-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.timer-big {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.timed-score {
+    font-size: 1.2rem;
+}
+
+.timed-container {
+    position: relative;
+    min-height: 400px;
+}
+
+.timed-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.timed-card-pair {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.timed-card {
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 15px;
+    padding: 30px;
+    min-width: 200px;
+    text-align: center;
+}
+
+.timed-card .card-category {
+    color: #667eea;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.timed-card .card-command {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+.timed-card .card-description {
+    font-size: 1.1rem;
+    color: #2d3436;
+}
+
+.timed-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.timed-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.thumbs-up {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+    color: white;
+}
+
+.thumbs-up:hover {
+    transform: translateY(-2px);
+}
+
+.thumbs-down {
+    background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    color: white;
+}
+
+.thumbs-down:hover {
+    transform: translateY(-2px);
+}
+
+.timed-progress {
+    font-size: 1.1rem;
+    color: #636e72;
+}
+
+.timed-timer-display {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+@media (max-width: 768px) {
+    .drag-drop-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .timed-card-pair {
+        flex-direction: column;
+    }
+    
+    .timed-card {
+        width: 100%;
+    }
+}
