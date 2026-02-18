@@ -1,0 +1,160 @@
+{
+  "cards": [
+    {
+      "id": "j1",
+      "rank": "A",
+      "suit": "hearts",
+      "command": "INNER JOIN",
+      "syntax": "SELECT * FROM t1 INNER JOIN t2 ON t1.id = t2.id",
+      "description": "Returns rows when match exists in both tables",
+      "example": "SELECT users.name, orders.total FROM users INNER JOIN orders ON users.id = orders.user_id;",
+      "explanation": "INNER JOIN returns only the rows where there is a match in both tables based on the join condition. Rows without matches are excluded from the result.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j2",
+      "rank": "2",
+      "suit": "hearts",
+      "command": "LEFT JOIN",
+      "syntax": "SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id",
+      "description": "Returns all left table rows plus matched right rows",
+      "example": "SELECT customers.name, orders.id FROM customers LEFT JOIN orders ON customers.id = orders.customer_id;",
+      "explanation": "LEFT JOIN returns ALL rows from the left table and matching rows from the right table. If no match, NULL values appear for right table columns.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j3",
+      "rank": "3",
+      "suit": "hearts",
+      "command": "RIGHT JOIN",
+      "syntax": "SELECT * FROM t1 RIGHT JOIN t2 ON t1.id = t2.id",
+      "description": "Returns all right table rows plus matched left rows",
+      "example": "SELECT orders.id, customers.name FROM orders RIGHT JOIN customers ON orders.customer_id = customers.id;",
+      "explanation": "RIGHT JOIN returns ALL rows from the right table and matching rows from the left table. Opposite of LEFT JOIN - rarely used as LEFT JOIN is more intuitive.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j4",
+      "rank": "4",
+      "suit": "hearts",
+      "command": "FULL OUTER JOIN",
+      "syntax": "SELECT * FROM t1 FULL OUTER JOIN t2 ON t1.id = t2.id",
+      "description": "Returns rows when match exists in either table",
+      "example": "SELECT employees.name, departments.name FROM employees FULL OUTER JOIN departments ON employees.dept_id = departments.id;",
+      "explanation": "FULL OUTER JOIN returns all rows from both tables. Matching rows are combined, non-matching rows have NULL for missing columns.",
+      "category": "Join",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "j5",
+      "rank": "5",
+      "suit": "hearts",
+      "command": "CROSS JOIN",
+      "syntax": "SELECT * FROM t1 CROSS JOIN t2",
+      "description": "Returns Cartesian product of two tables",
+      "example": "SELECT colors.name, sizes.name FROM colors CROSS JOIN sizes;",
+      "explanation": "CROSS JOIN combines every row from the first table with every row from the second table. If table A has 3 rows and B has 4, result has 12 rows.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j6",
+      "rank": "6",
+      "suit": "hearts",
+      "command": "SELF JOIN",
+      "syntax": "SELECT * FROM table t1 JOIN table t2 ON t1.col = t2.col",
+      "description": "Joins a table to itself",
+      "example": "SELECT e.name, m.name AS manager FROM employees e LEFT JOIN employees m ON e.manager_id = m.id;",
+      "explanation": "A SELF JOIN is when a table joins to itself. Useful for hierarchical data like employees and managers, or categories with parent categories.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j7",
+      "rank": "7",
+      "suit": "hearts",
+      "command": "NATURAL JOIN",
+      "syntax": "SELECT * FROM t1 NATURAL JOIN t2",
+      "description": "Joins tables by columns with same names",
+      "example": "SELECT * FROM employees NATURAL JOIN departments;",
+      "explanation": "NATURAL JOIN automatically joins tables based on columns with the same name. Implicit and can be dangerous - explicit JOIN is recommended.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j8",
+      "rank": "8",
+      "suit": "hearts",
+      "command": "USING",
+      "syntax": "SELECT * FROM t1 JOIN t2 USING (col_name)",
+      "description": "Simplifies join when column names match",
+      "example": "SELECT * FROM orders JOIN order_items USING (order_id);",
+      "explanation": "USING is a shorthand when both tables have the same column name. Instead of ON t1.id = t2.id, you can write USING (id).",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j9",
+      "rank": "9",
+      "suit": "hearts",
+      "command": "LEFT OUTER JOIN",
+      "syntax": "SELECT * FROM t1 LEFT OUTER JOIN t2 ON t1.id = t2.id",
+      "description": "Same as LEFT JOIN ( OUTER is optional)",
+      "example": "SELECT customers.name, orders.id FROM customers LEFT OUTER JOIN orders ON customers.id = orders.customer_id;",
+      "explanation": "LEFT OUTER JOIN is the same as LEFT JOIN. The OUTER keyword is optional and commonly omitted.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j10",
+      "rank": "10",
+      "suit": "hearts",
+      "command": "EQUI JOIN",
+      "syntax": "SELECT * FROM t1, t2 WHERE t1.id = t2.id",
+      "description": "Join using equality comparison",
+      "example": "SELECT * FROM employees, departments WHERE employees.dept_id = departments.id;",
+      "explanation": "EQUI JOIN uses the equality operator (=) in the join condition. Can use old-style comma syntax with WHERE or modern JOIN with ON.",
+      "category": "Join",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "j11",
+      "rank": "J",
+      "suit": "hearts",
+      "command": "NON-EQUI JOIN",
+      "syntax": "SELECT * FROM t1 JOIN t2 ON t1.val BETWEEN t2.min AND t2.max",
+      "description": "Join using non-equality operators",
+      "example": "SELECT e.name, s.grade FROM employees e JOIN salary_grades s ON e.salary BETWEEN s.min_sal AND s.max_sal;",
+      "explanation": "NON-EQUI JOIN uses operators other than = (like <, >, BETWEEN). Useful for range matching, like finding salary grade bands.",
+      "category": "Join",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "j12",
+      "rank": "Q",
+      "suit": "hearts",
+      "command": "THREE TABLE JOIN",
+      "syntax": "SELECT * FROM t1 JOIN t2 ON ... JOIN t3 ON ...",
+      "description": "Join three or more tables",
+      "example": "SELECT c.name, o.order_date, i.product FROM customers c JOIN orders o ON c.id = o.customer_id JOIN order_items i ON o.id = i.order_id;",
+      "explanation": "You can chain multiple JOINs to combine data from many tables. Each JOIN links tables based on their relationships.",
+      "category": "Join",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "j13",
+      "rank": "K",
+      "suit": "hearts",
+      "command": "LATERAL JOIN",
+      "syntax": "SELECT * FROM t1, LATERAL (SELECT ...) t2",
+      "description": "Join with subquery that references outer query",
+      "example": "SELECT u.name, top_orders.total FROM users u, LATERAL (SELECT total FROM orders WHERE user_id = u.id ORDER BY total DESC LIMIT 3) top_orders;",
+      "explanation": "LATERAL allows a subquery to reference columns from tables that appear earlier in the FROM clause. Great for top-N per group queries.",
+      "category": "Advanced",
+      "difficulty": "advanced"
+    }
+  ]
+}

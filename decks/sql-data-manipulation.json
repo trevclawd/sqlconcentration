@@ -1,0 +1,160 @@
+{
+  "cards": [
+    {
+      "id": "d1",
+      "rank": "A",
+      "suit": "clubs",
+      "command": "INSERT VALUES",
+      "syntax": "INSERT INTO table (cols) VALUES (vals)",
+      "description": "Insert a single row",
+      "example": "INSERT INTO users (name, email) VALUES ('John', 'john@example.com');",
+      "explanation": "INSERT INTO adds new rows. Specify column names for clarity. VALUES contains the data to insert in the same order as columns.",
+      "category": "DML",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "d2",
+      "rank": "2",
+      "suit": "clubs",
+      "command": "INSERT SELECT",
+      "syntax": "INSERT INTO table SELECT ... FROM ...",
+      "description": "Insert rows from another table",
+      "example": "INSERT INTO archive_orders SELECT * FROM orders WHERE order_date < '2023-01-01';",
+      "explanation": "INSERT SELECT copies data from one table to another. Useful for archiving, creating backup tables, or transforming data.",
+      "category": "DML",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d3",
+      "rank": "3",
+      "suit": "clubs",
+      "command": "INSERT MULTIPLE",
+      "syntax": "INSERT INTO table (cols) VALUES (v1), (v2), (v3)",
+      "description": "Insert multiple rows at once",
+      "example": "INSERT INTO products (name, price) VALUES ('Apple', 1.00), ('Banana', 0.50), ('Orange', 1.20);",
+      "explanation": "Multiple VALUES clauses in one INSERT is more efficient than separate INSERTs. Reduces round trips to the database.",
+      "category": "DML",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "d4",
+      "rank": "4",
+      "suit": "clubs",
+      "command": "UPDATE SET",
+      "syntax": "UPDATE table SET col = val WHERE condition",
+      "description": "Modify existing rows",
+      "example": "UPDATE products SET price = price * 1.10 WHERE category = 'Electronics';",
+      "explanation": "UPDATE changes data in existing rows. ALWAYS use WHERE to limit which rows are affected. Without WHERE, ALL rows are updated!",
+      "category": "DML",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "d5",
+      "rank": "5",
+      "suit": "clubs",
+      "command": "UPDATE FROM JOIN",
+      "syntax": "UPDATE t1 SET col = t2.val FROM t2 WHERE t1.id = t2.id",
+      "description": "Update using values from another table",
+      "example": "UPDATE orders o SET status = 'cancelled' FROM order_notes n WHERE o.id = n.order_id AND n.note = 'Customer cancelled';",
+      "explanation": "Some databases allow UPDATE with FROM clause to reference other tables. Syntax varies by database (PostgreSQL, SQL Server).",
+      "category": "DML",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d6",
+      "rank": "6",
+      "suit": "clubs",
+      "command": "DELETE FROM",
+      "syntax": "DELETE FROM table WHERE condition",
+      "description": "Remove rows from table",
+      "example": "DELETE FROM logs WHERE created_at < DATE_SUB(NOW(), INTERVAL 90 DAY);",
+      "explanation": "DELETE removes rows from a table. ALWAYS use WHERE clause! DELETE without WHERE removes ALL rows.",
+      "category": "DML",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "d7",
+      "rank": "7",
+      "suit": "clubs",
+      "command": "TRUNCATE TABLE",
+      "syntax": "TRUNCATE TABLE table_name",
+      "description": "Remove all rows quickly",
+      "example": "TRUNCATE TABLE temp_data;",
+      "explanation": "TRUNCATE removes all rows faster than DELETE. It's DDL not DML, can't be rolled back in some databases, and resets auto-increment.",
+      "category": "DDL",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d8",
+      "rank": "8",
+      "suit": "clubs",
+      "command": "MERGE / UPSERT",
+      "syntax": "MERGE INTO target USING source ON condition WHEN MATCHED THEN UPDATE ... WHEN NOT MATCHED THEN INSERT ...",
+      "description": "Insert or update based on match",
+      "example": "MERGE INTO customers c USING new_customers n ON c.email = n.email WHEN MATCHED THEN UPDATE SET c.name = n.name WHEN NOT MATCHED THEN INSERT (name, email) VALUES (n.name, n.email);",
+      "explanation": "MERGE combines INSERT and UPDATE. If row exists (match), update it. If not, insert it. Also called UPSERT. Syntax varies by database.",
+      "category": "DML",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "d9",
+      "rank": "9",
+      "suit": "clubs",
+      "command": "INSERT ON CONFLICT",
+      "syntax": "INSERT INTO table VALUES (...) ON CONFLICT (col) DO UPDATE SET ...",
+      "description": "PostgreSQL upsert syntax",
+      "example": "INSERT INTO users (email, name) VALUES ('john@example.com', 'John') ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name;",
+      "explanation": "ON CONFLICT is PostgreSQL's upsert. DO UPDATE handles duplicates, DO NOTHING ignores them. EXCLUDED refers to the would-be inserted row.",
+      "category": "DML",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "d10",
+      "rank": "10",
+      "suit": "clubs",
+      "command": "RETURNING",
+      "syntax": "INSERT/UPDATE/DELETE ... RETURNING *",
+      "description": "Returns affected rows",
+      "example": "INSERT INTO users (name) VALUES ('John') RETURNING id, created_at;",
+      "explanation": "RETURNING (PostgreSQL/SQLite) returns the rows that were inserted, updated, or deleted. Useful for getting auto-generated IDs.",
+      "category": "DML",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d11",
+      "rank": "J",
+      "suit": "clubs",
+      "command": "BEGIN TRANSACTION",
+      "syntax": "BEGIN; or START TRANSACTION;",
+      "description": "Start a transaction block",
+      "example": "BEGIN; UPDATE accounts SET balance = balance - 100 WHERE id = 1; UPDATE accounts SET balance = balance + 100 WHERE id = 2; COMMIT;",
+      "explanation": "BEGIN starts a transaction. All changes are temporary until COMMIT. Use ROLLBACK to undo changes if something goes wrong.",
+      "category": "Transaction",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d12",
+      "rank": "Q",
+      "suit": "clubs",
+      "command": "COMMIT / ROLLBACK",
+      "syntax": "COMMIT; or ROLLBACK;",
+      "description": "Save or undo transaction changes",
+      "example": "BEGIN; DELETE FROM orders WHERE id = 123; -- Oops, wrong order! ROLLBACK;",
+      "explanation": "COMMIT makes changes permanent. ROLLBACK undoes all changes since BEGIN. Essential for maintaining data consistency.",
+      "category": "Transaction",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "d13",
+      "rank": "K",
+      "suit": "clubs",
+      "command": "SAVEPOINT",
+      "syntax": "SAVEPOINT name; ROLLBACK TO name;",
+      "description": "Create partial rollback points",
+      "example": "BEGIN; INSERT INTO orders ...; SAVEPOINT order_created; INSERT INTO order_items ...; -- If items fail ROLLBACK TO order_created; COMMIT;",
+      "explanation": "SAVEPOINT creates markers within a transaction. You can rollback to a savepoint instead of the entire transaction. Useful for complex operations.",
+      "category": "Transaction",
+      "difficulty": "advanced"
+    }
+  ]
+}

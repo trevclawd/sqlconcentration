@@ -1,0 +1,160 @@
+{
+  "cards": [
+    {
+      "id": "w1",
+      "rank": "A",
+      "suit": "spades",
+      "command": "ROW_NUMBER()",
+      "syntax": "ROW_NUMBER() OVER (ORDER BY col)",
+      "description": "Assigns sequential numbers to rows",
+      "example": "SELECT name, score, ROW_NUMBER() OVER (ORDER BY score DESC) as rank FROM players;",
+      "explanation": "ROW_NUMBER() assigns unique sequential integers starting at 1. Each row gets a different number even with ties.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w2",
+      "rank": "2",
+      "suit": "spades",
+      "command": "RANK()",
+      "syntax": "RANK() OVER (ORDER BY col)",
+      "description": "Ranks rows with gaps for ties",
+      "example": "SELECT name, score, RANK() OVER (ORDER BY score DESC) as rank FROM players;",
+      "explanation": "RANK() assigns the same rank to tied rows, then skips numbers. If two people tie for 1st, next rank is 3rd.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w3",
+      "rank": "3",
+      "suit": "spades",
+      "command": "DENSE_RANK()",
+      "syntax": "DENSE_RANK() OVER (ORDER BY col)",
+      "description": "Ranks rows without gaps",
+      "example": "SELECT name, score, DENSE_RANK() OVER (ORDER BY score DESC) as rank FROM players;",
+      "explanation": "DENSE_RANK() assigns same rank to ties but doesn't skip numbers. If two tie for 1st, next is still 2nd.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w4",
+      "rank": "4",
+      "suit": "spades",
+      "command": "PARTITION BY",
+      "syntax": "func() OVER (PARTITION BY col ORDER BY col)",
+      "description": "Divides data into groups for window functions",
+      "example": "SELECT name, department, salary, AVG(salary) OVER (PARTITION BY department) FROM employees;",
+      "explanation": "PARTITION BY divides rows into groups. The window function is applied to each partition separately, like GROUP BY but without collapsing rows.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w5",
+      "rank": "5",
+      "suit": "spades",
+      "command": "LEAD()",
+      "syntax": "LEAD(col, offset) OVER (ORDER BY col)",
+      "description": "Access next row's value",
+      "example": "SELECT date, sales, LEAD(sales, 1) OVER (ORDER BY date) as next_day FROM daily_sales;",
+      "explanation": "LEAD() lets you look at values from rows that come after the current row. Great for comparing current vs next values.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w6",
+      "rank": "6",
+      "suit": "spades",
+      "command": "LAG()",
+      "syntax": "LAG(col, offset) OVER (ORDER BY col)",
+      "description": "Access previous row's value",
+      "example": "SELECT date, sales, LAG(sales, 1) OVER (ORDER BY date) as prev_day FROM daily_sales;",
+      "explanation": "LAG() lets you look at values from rows that come before the current row. Perfect for calculating change from previous period.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w7",
+      "rank": "7",
+      "suit": "spades",
+      "command": "FIRST_VALUE()",
+      "syntax": "FIRST_VALUE(col) OVER (PARTITION BY ... ORDER BY ...)",
+      "description": "Returns first value in window",
+      "example": "SELECT date, price, FIRST_VALUE(price) OVER (ORDER BY date) as initial_price FROM stock_prices;",
+      "explanation": "FIRST_VALUE() returns the value from the first row in the window frame. Useful for comparing to initial or earliest values.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w8",
+      "rank": "8",
+      "suit": "spades",
+      "command": "LAST_VALUE()",
+      "syntax": "LAST_VALUE(col) OVER (PARTITION BY ... ORDER BY ... ROWS BETWEEN ...)",
+      "description": "Returns last value in window",
+      "example": "SELECT date, price, LAST_VALUE(price) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as final_price FROM stock_prices;",
+      "explanation": "LAST_VALUE() needs proper frame specification. Default frame ends at current row, so use ROWS BETWEEN for full range.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w9",
+      "rank": "9",
+      "suit": "spades",
+      "command": "NTILE(n)",
+      "syntax": "NTILE(n) OVER (ORDER BY col)",
+      "description": "Divides rows into n buckets",
+      "example": "SELECT name, score, NTILE(4) OVER (ORDER BY score DESC) as quartile FROM students;",
+      "explanation": "NTILE(n) divides ordered rows into approximately equal groups. NTILE(4) creates quartiles, NTILE(100) creates percentiles.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w10",
+      "rank": "10",
+      "suit": "spades",
+      "command": "ROWS BETWEEN",
+      "syntax": "ROWS BETWEEN start AND end",
+      "description": "Defines window frame boundaries",
+      "example": "SELECT date, sales, AVG(sales) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) as rolling_avg FROM daily_sales;",
+      "explanation": "ROWS BETWEEN defines which rows to include in the window. Use UNBOUNDED PRECEDING/FOLLOWING, n PRECEDING/FOLLOWING, or CURRENT ROW.",
+      "category": "Window",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w11",
+      "rank": "J",
+      "suit": "spades",
+      "command": "WITH (CTE)",
+      "syntax": "WITH cte_name AS (SELECT ...) SELECT * FROM cte_name",
+      "description": "Creates temporary named result set",
+      "example": "WITH top_customers AS (SELECT customer_id, SUM(total) as spent FROM orders GROUP BY customer_id HAVING SUM(total) > 1000) SELECT * FROM top_customers;",
+      "explanation": "CTEs (Common Table Expressions) create temporary result sets that exist only for the query. Improves readability and enables recursive queries.",
+      "category": "CTE",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w12",
+      "rank": "Q",
+      "suit": "spades",
+      "command": "RECURSIVE CTE",
+      "syntax": "WITH RECURSIVE cte AS (base_case UNION ALL recursive_step)",
+      "description": "CTE that references itself",
+      "example": "WITH RECURSIVE hierarchy AS (SELECT id, name, manager_id FROM employees WHERE manager_id IS NULL UNION ALL SELECT e.id, e.name, e.manager_id FROM employees e JOIN hierarchy h ON e.manager_id = h.id) SELECT * FROM hierarchy;",
+      "explanation": "Recursive CTEs can reference themselves, enabling hierarchical queries like org charts or category trees. Must have base case and termination condition.",
+      "category": "CTE",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "w13",
+      "rank": "K",
+      "suit": "spades",
+      "command": "Multiple CTEs",
+      "syntax": "WITH cte1 AS (...), cte2 AS (...) SELECT * FROM cte1 JOIN cte2",
+      "description": "Chain multiple CTEs together",
+      "example": "WITH monthly_sales AS (...), monthly_targets AS (...) SELECT m.month, m.sales, t.target FROM monthly_sales m JOIN monthly_targets t ON m.month = t.month;",
+      "explanation": "You can define multiple CTEs separated by commas. Each CTE can reference previous CTEs. Great for complex multi-step transformations.",
+      "category": "CTE",
+      "difficulty": "advanced"
+    }
+  ]
+}

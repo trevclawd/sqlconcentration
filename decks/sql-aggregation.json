@@ -1,0 +1,160 @@
+{
+  "cards": [
+    {
+      "id": "a1",
+      "rank": "A",
+      "suit": "diamonds",
+      "command": "COUNT(*)",
+      "syntax": "SELECT COUNT(*) FROM table_name",
+      "description": "Counts total number of rows",
+      "example": "SELECT COUNT(*) FROM orders WHERE status = 'completed';",
+      "explanation": "COUNT(*) returns the total number of rows including NULLs. Use COUNT(column) to count only non-NULL values in a specific column.",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a2",
+      "rank": "2",
+      "suit": "diamonds",
+      "command": "COUNT(DISTINCT)",
+      "syntax": "SELECT COUNT(DISTINCT column) FROM table",
+      "description": "Counts unique non-NULL values",
+      "example": "SELECT COUNT(DISTINCT customer_id) FROM orders;",
+      "explanation": "COUNT(DISTINCT column) counts only unique values, removing duplicates. Perfect for counting how many different customers made orders.",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a3",
+      "rank": "3",
+      "suit": "diamonds",
+      "command": "SUM()",
+      "syntax": "SELECT SUM(column) FROM table",
+      "description": "Calculates total of numeric values",
+      "example": "SELECT SUM(amount) FROM payments WHERE payment_date >= '2024-01-01';",
+      "explanation": "SUM() adds up all values in a numeric column. NULL values are ignored. Use with GROUP BY for subtotals.",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a4",
+      "rank": "4",
+      "suit": "diamonds",
+      "command": "AVG()",
+      "syntax": "SELECT AVG(column) FROM table",
+      "description": "Calculates average of numeric values",
+      "example": "SELECT AVG(salary) FROM employees WHERE department = 'Engineering';",
+      "explanation": "AVG() returns the arithmetic mean of values. NULL values are excluded from the calculation.",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a5",
+      "rank": "5",
+      "suit": "diamonds",
+      "command": "MIN()",
+      "syntax": "SELECT MIN(column) FROM table",
+      "description": "Returns the minimum value",
+      "example": "SELECT MIN(price) FROM products WHERE category = 'Electronics';",
+      "explanation": "MIN() finds the smallest value. Works with numbers, dates, and text (alphabetically first).",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a6",
+      "rank": "6",
+      "suit": "diamonds",
+      "command": "MAX()",
+      "syntax": "SELECT MAX(column) FROM table",
+      "description": "Returns the maximum value",
+      "example": "SELECT MAX(created_at) FROM orders;",
+      "explanation": "MAX() finds the largest value. Works with numbers, dates (most recent), and text (alphabetically last).",
+      "category": "Aggregate",
+      "difficulty": "beginner"
+    },
+    {
+      "id": "a7",
+      "rank": "7",
+      "suit": "diamonds",
+      "command": "GROUP BY",
+      "syntax": "SELECT col, agg() FROM table GROUP BY col",
+      "description": "Groups rows for aggregation",
+      "example": "SELECT department, COUNT(*) FROM employees GROUP BY department;",
+      "explanation": "GROUP BY groups rows that have the same values in specified columns. Each group produces one result row when combined with aggregate functions.",
+      "category": "Aggregate",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "a8",
+      "rank": "8",
+      "suit": "diamonds",
+      "command": "HAVING",
+      "syntax": "SELECT col, COUNT(*) FROM table GROUP BY col HAVING COUNT(*) > value",
+      "description": "Filters groups after aggregation",
+      "example": "SELECT customer_id, COUNT(*) as orders FROM orders GROUP BY customer_id HAVING COUNT(*) > 5;",
+      "explanation": "HAVING filters groups after GROUP BY aggregates them. Unlike WHERE which filters rows before grouping, HAVING filters the grouped results.",
+      "category": "Aggregate",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "a9",
+      "rank": "9",
+      "suit": "diamonds",
+      "command": "GROUP_CONCAT",
+      "syntax": "SELECT GROUP_CONCAT(col) FROM table GROUP BY col",
+      "description": "Concatenates values from a group",
+      "example": "SELECT department, GROUP_CONCAT(name) FROM employees GROUP BY department;",
+      "explanation": "GROUP_CONCAT (MySQL) or STRING_AGG (PostgreSQL) combines values from multiple rows into a single string. Great for creating comma-separated lists.",
+      "category": "Aggregate",
+      "difficulty": "intermediate"
+    },
+    {
+      "id": "a10",
+      "rank": "10",
+      "suit": "diamonds",
+      "command": "ROLLUP",
+      "syntax": "SELECT col, SUM(val) FROM table GROUP BY ROLLUP(col)",
+      "description": "Creates subtotals and grand total",
+      "example": "SELECT region, product, SUM(sales) FROM sales_data GROUP BY ROLLUP(region, product);",
+      "explanation": "ROLLUP creates hierarchical subtotals. For GROUP BY ROLLUP(a,b), it creates groups for (a,b), (a), and grand total.",
+      "category": "Advanced",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "a11",
+      "rank": "J",
+      "suit": "diamonds",
+      "command": "CUBE",
+      "syntax": "SELECT col, SUM(val) FROM table GROUP BY CUBE(col1, col2)",
+      "description": "Creates all possible subtotal combinations",
+      "example": "SELECT region, year, SUM(sales) FROM sales_data GROUP BY CUBE(region, year);",
+      "explanation": "CUBE generates subtotals for all combinations of columns. For 2 columns, creates subtotals for each column plus grand total.",
+      "category": "Advanced",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "a12",
+      "rank": "Q",
+      "suit": "diamonds",
+      "command": "GROUPING SETS",
+      "syntax": "SELECT col, SUM(val) FROM table GROUP BY GROUPING SETS ((a), (b), (a,b))",
+      "description": "Custom grouping combinations",
+      "example": "SELECT region, product, SUM(sales) FROM sales_data GROUP BY GROUPING SETS ((region), (product), (region, product));",
+      "explanation": "GROUPING SETS lets you specify exactly which grouping combinations you want. More flexible than ROLLUP or CUBE.",
+      "category": "Advanced",
+      "difficulty": "advanced"
+    },
+    {
+      "id": "a13",
+      "rank": "K",
+      "suit": "diamonds",
+      "command": "HAVING vs WHERE",
+      "syntax": "WHERE filters rows, HAVING filters groups",
+      "description": "WHERE before grouping, HAVING after",
+      "example": "SELECT category, SUM(price) FROM products WHERE active = 1 GROUP BY category HAVING SUM(price) > 100;",
+      "explanation": "WHERE filters individual rows before aggregation. HAVING filters the grouped results after aggregation. Use WHERE when possible for better performance.",
+      "category": "Concept",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,13 +1,42 @@
 {
   "name": "SQL Learning Library",
   "description": "Comprehensive SQL lessons from beginner to advanced",
-  "totalDecks": 1,
+  "totalDecks": 5,
+  "totalCards": 135,
   "decks": [
     {
       "filename": "sql-basics.json",
       "name": "SQL Fundamentals",
-      "description": "Essential SQL commands and syntax",
+      "description": "Essential SELECT, WHERE, ORDER BY, and basic clauses",
       "cardCount": 52,
+      "difficulty": "beginner"
+    },
+    {
+      "filename": "sql-joins.json",
+      "name": "SQL Joins",
+      "description": "Master all join types: INNER, LEFT, RIGHT, FULL, CROSS, SELF",
+      "cardCount": 13,
+      "difficulty": "intermediate"
+    },
+    {
+      "filename": "sql-aggregation.json",
+      "name": "Aggregation & Grouping",
+      "description": "COUNT, SUM, AVG, GROUP BY, HAVING, ROLLUP, CUBE",
+      "cardCount": 13,
+      "difficulty": "intermediate"
+    },
+    {
+      "filename": "sql-advanced.json",
+      "name": "Window Functions & CTEs",
+      "description": "ROW_NUMBER, RANK, LAG, LEAD, WITH clauses, recursive CTEs",
+      "cardCount": 13,
+      "difficulty": "advanced"
+    },
+    {
+      "filename": "sql-data-manipulation.json",
+      "name": "Data Manipulation",
+      "description": "INSERT, UPDATE, DELETE, MERGE, transactions",
+      "cardCount": 13,
       "difficulty": "beginner"
     }
   ]
