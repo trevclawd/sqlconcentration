@@ -1047,7 +1047,11 @@ Format with clear headings and code examples.`
     setupEventListeners() {
         // Mode selection cards
         document.getElementById('memorizeMode')?.addEventListener('click', () => this.showPreGame());
-        document.getElementById('concentrationMode')?.addEventListener('click', () => this.showPreGame());
+        document.getElementById('concentrationMode')?.addEventListener('click', () => {
+            this.displayPreGameCards();
+            this.displayListenList();
+            this.showGame();
+        });
         document.getElementById('dragDropMode')?.addEventListener('click', () => this.showDragDrop());
         document.getElementById('listenMode')?.addEventListener('click', () => this.showListenMode());
         document.getElementById('practiceMode')?.addEventListener('click', () => this.showPracticeMode());
