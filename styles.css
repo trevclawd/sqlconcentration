@@ -248,14 +248,17 @@ body {
 
 .game-board {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .game-card {
-    aspect-ratio: 1;
     cursor: pointer;
     perspective: 1000px;
+    min-height: 160px;
+    position: relative;
 }
 
 .card-inner {
@@ -274,14 +277,18 @@ body {
 .game-card .card-front,
 .game-card .card-back {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 12px;
+    box-sizing: border-box;
 }
 
 .game-card .card-front {
@@ -303,23 +310,33 @@ body {
 }
 
 .card-category-tag {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     color: #667eea;
     text-transform: uppercase;
     font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .card-command-text {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: bold;
     font-family: 'Courier New', monospace;
     text-align: center;
     word-break: break-word;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-desc-text {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-align: center;
+    line-height: 1.4;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Listen Mode */
@@ -569,7 +586,8 @@ body {
     }
     
     .game-board {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
     }
     
     .card-pairs-container {
@@ -578,6 +596,11 @@ body {
     
     .listen-item-header {
         flex-wrap: wrap;
+    }
+    
+    .game-stats {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 
